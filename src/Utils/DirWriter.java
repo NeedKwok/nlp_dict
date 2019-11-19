@@ -8,23 +8,23 @@ public class DirWriter {
      * 持久化字典树，但比直接建树更慢，就不适用了（也许是因为数据结构不好）
      */
 
-    private static final String treeFile = "dic_tree.out" ;
+    public static final String trieFile = "dic_tree.out" ;
 
-    public static void writeTree(TreeNode root){
+    static void writeTrie(Trie.TrieNode root){
         try{
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(treeFile));
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(trieFile));
             oos.writeObject(root);
         }catch (IOException e){
             e.printStackTrace();
         }
     }
 
-    public static TreeNode readTree(){
-        TreeNode root = null;
+    public static Trie.TrieNode readTrie(){
+        Trie.TrieNode root = null;
         ObjectInputStream oin ;
         try {
-            oin = new ObjectInputStream(new FileInputStream(treeFile));
-            root =(TreeNode) oin.readObject();
+            oin = new ObjectInputStream(new FileInputStream(trieFile));
+            root =(Trie.TrieNode) oin.readObject();
         }  catch (IOException | ClassNotFoundException e1) {
             e1.printStackTrace();
         }

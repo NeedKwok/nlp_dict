@@ -1,7 +1,7 @@
 package Solution;
 
 import Utils.DirReader;
-import Utils.DirTree;
+import Utils.Trie;
 
 import java.util.Scanner;
 
@@ -12,15 +12,19 @@ public class Main {
 
     public static void main(String[] args){
         String str;
-        DirTree dirTree;
-        //File testFile = new File(treeFile);
+        Trie trie;
+        /**
+         * 由于字典较小，持久化字典比重建字典慢很多，所以下面的代码弃用了
+         */
+//        File testFile = new File(trieFile);
 //        if(testFile .exists()) { //判断之前是否写过文件
-//            dirTree = new DirTree(DirWriter.readTree());
-//            System.out.println("1");
+//            trie = new Trie(DirWriter.readTrie());
+//            //System.out.println("1");
 //        }else{
-            dirTree = DirReader.readByLine();
-            //       System.out.println("2");
- //       }
+//            trie = DirReader.readByLine();
+//            //System.out.println("2");
+//        }
+        trie = DirReader.readByLine();
         Scanner sc = new Scanner(System.in);
         String[] words;
         while(true) {
@@ -30,7 +34,7 @@ public class Main {
                 break;
             words = str.split(" ");
             for (String word : words) {
-                System.out.println(dirTree.searchWord(word));
+                System.out.println(trie.searchWord(word));
             }
         }
     }

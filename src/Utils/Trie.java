@@ -1,43 +1,53 @@
 package Utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DirTree {
-    /**
-     * 字典树类，包括建立字典树，查询单词两个方法
-     * 字典以ASCII序排列，但是有一个单词含有字母 "é" ，不放入字典树中即可
-     */
-    /*private static char[] charTable = {'!', '\"', '\'','(',')','-','.',
-            '0','1','2','3','4','5','6','7','8','9','?'};*/
-    private TreeNode root;
-    private int ct = 1;
-
-    DirTree(){
-        root = new TreeNode();
+public class Trie {
+    private TrieNode root;
+    static class TrieNode implements Serializable {
+        int num;//有多少单词通过这个节点,即由根至该节点组成的字符串模式出现的次数
+        Map<Character, TrieNode> sons;//所有的儿子节点
+        boolean isEnd;//是不是最后一个节点
+        String meaning;//解释
+        boolean haveSon;//有无孩子
+        TrieNode()
+        {
+            num = 1;
+            sons = new HashMap<>();
+            isEnd=false;
+            haveSon=false;
+        }
     }
-    public DirTree(TreeNode treeNode){//为反序列化准备的构造方法，但没用了
-        root = treeNode;
+
+    public Trie(){
+        root = new TrieNode();
+    }
+
+    public Trie(TrieNode node){
+        root = node;
+    }
+
+    public TrieNode getRoot(){
+        return root;
     }
 
     void insert(String[] line){
         if(line == null)
             return;
-        TreeNode node = root;
+        TrieNode node = root;
         char[] letters = line[0].toCharArray();
-        int len = letters.length;
         for (char letter : letters) {
-            int pos = letter - '!';
-            if (node.son[pos] == null) {
+            if (!node.sons.containsKey(letter)) {
                 node.haveSon = true;
-                node.son[pos] = new TreeNode();
-                node.son[pos].val = letter;
+                node.sons.put(letter, new TrieNode()) ;
             } else {
                 node.num++;
             }
-            node = node.son[pos];
+            node = node.sons.get(letter);
         }
         node.isEnd = true;
         node.meaning = line[1].replace("\uF8F5"," ");
@@ -128,32 +138,15 @@ public class DirTree {
     }
 
     private String search(String str){
-        if(str.equals("moiré")){
-            return "moiré none. 波纹";
-        }
-        TreeNode node = root;
+        TrieNode node = root;
         char[] letters = str.toCharArray();
-        int len = letters.length;
         for (char letter : letters) {
-            int pos = letter - '!';
-            if (node.son[pos] == null)
+            if (!node.sons.containsKey(letter))
                 return null;
-            node = node.son[pos];
+            node = node.sons.get(letter);
         }
         if(!node.isEnd)
             return null;
         return str + " " + node.meaning;
     }
-
-    private void traversal(TreeNode node, int ct){
-        if(node != null){
-            System.out.println(node.val+ " " + ct);
-            if(node.haveSon){
-                for(TreeNode i:node.son){
-                    traversal(i,ct+1);
-                }
-            }
-        }
-    }
-
 }

@@ -10,21 +10,19 @@ public class DirReader {
      */
     private static final String dic_ec = "dic_ec.txt" ;
 
-    public static DirTree readByLine()  {
+    public static Trie readByLine()  {
         File file = new File(dic_ec);
-        //BufferedReader reader = null;
         BufferedReader bfReader = null;
-        DirTree dirTree = new DirTree();
+        //DirTree dirTree = new DirTree();
+        Trie trie = new Trie();
         try {
             InputStreamReader utf8Reader = new InputStreamReader(new FileInputStream(file));
-            //System.out.println("以行为单位读取文件内容，一次读一整行：");
             bfReader = new BufferedReader(utf8Reader);
             String tempString;
             // 一次读入一行，直到读入null为文件结束
             while ((tempString = bfReader.readLine()) != null) {
                 String[] words = tempString.split("\uF8F5",2);
-                if(!words[0].contains("é"))
-                    dirTree.insert(words);
+                trie.insert(words);
             }
             bfReader.close();
         } catch (IOException e) {
@@ -39,7 +37,7 @@ public class DirReader {
             }
 
         }
-        //DirWriter.writeTree(dirTree.root);
-        return dirTree;
+        //DirWriter.writeTrie(trie.getRoot());
+        return trie;
     }
 }
